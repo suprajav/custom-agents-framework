@@ -1,0 +1,77 @@
+version: 1
+phases:
+  requirement:
+    reads:
+      - input/Automate Insurance Quote Extraction Process_PDD.md
+      - input/User Stories List.md
+    writes:
+      - output/docs/01-pdd-summary.md
+      - output/docs/02-user-stories-summary.md
+      - output/docs/03-requirements-consolidated.md
+  design:
+    reads:
+      - output/docs/03-requirements-consolidated.md
+    writes:
+      - output/docs/04-tech-stack.md
+      - output/docs/05-architecture.md
+      - output/docs/06-database-design.md
+      - output/docs/07-api-contract.md
+  planner:
+    reads:
+      - output/docs/04-tech-stack.md
+      - output/docs/05-architecture.md
+      - output/docs/06-database-design.md
+      - output/docs/07-api-contract.md
+    writes:
+      - output/docs/08-task-plan.md
+  implementation:
+    reads:
+      - output/docs/08-task-plan.md
+    writes:
+      - output/docs/09-backend-implementation.md
+      - output/docs/10-frontend-implementation.md
+      - output/docs/11-database-implementation.md
+      - output/docs/12-component-library.md
+  testing:
+    reads:
+      - output/docs/09-backend-implementation.md
+      - output/docs/10-frontend-implementation.md
+      - output/docs/11-database-implementation.md
+    writes:
+      - output/docs/13-test-suite.md
+      - output/docs/14-frontend-tests.md
+      - output/docs/15-accessibility-report.md
+      - output/docs/16-test-data.md
+  quality:
+    reads:
+      - output/docs/13-test-suite.md
+      - output/docs/16-test-data.md
+    writes:
+      - output/docs/17-code-best-practices-report.md
+      - output/docs/18-design-compliance-report.md
+      - output/docs/19-branding-compliance-report.md
+  compliance:
+    reads:
+      - output/docs/17-code-best-practices-report.md
+      - output/docs/18-design-compliance-report.md
+      - output/docs/19-branding-compliance-report.md
+    writes:
+      - output/docs/20-compliance-report.md
+  coverage_analyzer:
+    reads:
+      - output/docs/13-test-suite.md
+      - output/docs/20-compliance-report.md
+    writes:
+      - output/docs/21-code-coverage-report.md
+      - output/docs/22-security-scan-report.md
+      - output/docs/23-memory-leak-report.md
+      - output/docs/24-performance-report.md
+  deployment:
+    reads:
+      - output/docs/25-consolidated-report.md
+      - output/docs/20-compliance-report.md
+    writes:
+      - output/docs/25a-deployment-strategy.md
+      - output/docs/25b-infrastructure-config.md
+      - output/docs/25c-release-readiness.md
+      - output/docs/25d-monitoring-observability.md

@@ -1,0 +1,29 @@
+version: 1
+artifacts:
+  requirements:
+    path: output/docs/03-requirements-consolidated.md
+    owner: 203-requirements-consolidator.md
+  design:
+    path: output/docs/05-architecture.md
+    owner: 205-architecture-designer.md
+  task_plan:
+    path: output/docs/08-task-plan.md
+    owner: 208-task-planner.md
+  compliance:
+    path: output/docs/20-compliance-report.md
+    owner: 217-compliance-checker.md
+  consolidated_report:
+    path: output/docs/25-consolidated-report.md
+    owner: 221-report-consolidator.md
+  deployment_strategy:
+    path: output/docs/25a-deployment-strategy.md
+    owner: 225-deployment-strategy-designer.md
+  infrastructure_config:
+    path: output/docs/25b-infrastructure-config.md
+    owner: 226-infrastructure-config-generator.md
+  release_readiness:
+    path: output/docs/25c-release-readiness.md
+    owner: 227-release-readiness-checker.md
+  observability:
+    path: output/docs/25d-monitoring-observability.md
+    owner: 228-monitoring-observability-planner.md

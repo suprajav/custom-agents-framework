@@ -1,0 +1,47 @@
+{
+  "frameworkName": "custom-agent-framework",
+  "pipelineMode": "greenfield",
+  "orchestrator": ".claude/200-greenfield-orchestrator.md",
+  "commandSurface": {
+    "swaggerPipeline": ".claude/commands/swagger-pipeline.md"
+  },
+  "inputRoot": "input",
+  "outputRoot": "output/docs",
+  "requiredInputs": [
+    "Automate Insurance Quote Extraction Process_PDD.md",
+    "User Stories List.md",
+    "technical-mandates.md",
+    "coding-best-practices.md",
+    "compliance-requirements.md",
+    "branding-guidelines.md",
+    "README.md"
+  ],
+  "phaseOrder": [
+    "1 Requirement",
+    "2 Design",
+    "3 Planner",
+    "4 Implementation",
+    "5 Testing",
+    "6 Quality",
+    "7 Compliance",
+    "8 Coverage Analyzer",
+    "9 Deployment",
+    "10 Consolidated Report",
+    "11 Documentation"
+  ],
+  "deploymentPhaseHasVisibleFiles": true,
+  "runtime": {
+    "stateFile": ".claude/runtime/project-state.yaml",
+    "runner": ".claude/runtime/orchestrator-runner.py"
+  },
+  "contracts": {
+    "artifactRegistry": ".claude/contracts/artifact-registry.yaml",
+    "phaseMap": ".claude/contracts/phase-input-output-map.yaml",
+    "inputSchema": ".claude/contracts/input-schema.json"
+  },
+  "scripts": {
+    "runPipeline": ".claude/scripts/run-pipeline.sh",
+    "runPhase": ".claude/scripts/run-phase.sh",
+    "inspectState": ".claude/scripts/inspect-state.sh"
+  }
+}

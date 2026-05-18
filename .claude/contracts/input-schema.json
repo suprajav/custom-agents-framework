@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "custom-agent-framework input inventory",
+  "type": "object",
+  "required": [
+    "Automate Insurance Quote Extraction Process_PDD.md",
+    "User Stories List.md",
+    "technical-mandates.md",
+    "coding-best-practices.md",
+    "compliance-requirements.md",
+    "branding-guidelines.md",
+    "README.md"
+  ],
+  "properties": {
+    "Automate Insurance Quote Extraction Process_PDD.md": {
+      "type": "string"
+    },
+    "User Stories List.md": {
+      "type": "string"
+    },
+    "technical-mandates.md": {
+      "type": "string"
+    },
+    "coding-best-practices.md": {
+      "type": "string"
+    },
+    "compliance-requirements.md": {
+      "type": "string"
+    },
+    "branding-guidelines.md": {
+      "type": "string"
+    },
+    "README.md": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,7 @@
+{
+  "notes": "Local overrides for experimentation.",
+  "allowDeploymentPhaseSkip": true,
+  "writeOutputsAsMarkdown": true,
+  "keepOpenQuestionsVisible": true,
+  "defaultOutputRoot": "output/docs"
+}

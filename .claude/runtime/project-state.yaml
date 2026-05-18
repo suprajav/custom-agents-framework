@@ -1,0 +1,23 @@
+version: 1
+project:
+  name: custom-agent-framework-run
+  status: initialized
+workflow:
+  current_phase: requirement
+  completed_phases: []
+  pending_phases:
+    - requirement
+    - design
+    - planner
+    - implementation
+    - testing
+    - quality
+    - compliance
+    - coverage_analyzer
+    - deployment
+    - consolidated_report
+    - documentation
+artifacts:
+  generated: []
+notes:
+  - This starter state file can be updated by the runtime runner or manually for experimentation.
