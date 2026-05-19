@@ -1,0 +1,460 @@
+openapi: 3.0.1
+info:
+  title: ExposureModellingProcessor
+  description: Exposure Modelling Processor
+  contact:
+    name: EDIT Team
+    email: EDIT-Prod-Support@axaxl.com
+  license:
+    name: Not Available
+    url: https://not-available/
+  version: 1.0.0
+security:
+  - ApiKeyAuth: []
+paths:
+  /exposuremodelrequest:
+    post:
+      tags:
+        - Request for creating Exposure Model
+      summary: ExposureModelRequest
+      description: Send Submission Data to EMP Platform for creating Exposure Model
+      operationId: submission
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExposureModelRequest'
+            example:
+              submission:
+                submissionReference: XL-S000010880
+                targetSystem: EMP
+                submissionCurrencyCode: EUR
+                originatingOfficeCode: OF0004
+                lineOfOperationName: JB-Manufacturing
+                operationalSegmentName: Downstream Energy
+                systemAccountReference: SX3000817503/161
+                sourceCedentName: Global Prog wCICLUK
+                requestIdentifier: 54634-66543-8987
+                overallStatusCode: BND
+                partyAssociations:
+                  - partyRoleTypeCode: Underwriter
+                    party:
+                      partyTypecode: PERSON
+                      partyIdentifier: X00026758
+                      displayName: John Doe
+                  - partyRoleTypeCode: Insured
+                    party:
+                      partyTypecode: ORGANIZATION
+                      partyIdentifier: X00012345
+                      displayName: AXA XL
+                  - partyRoleTypeCode: Broker
+                    party:
+                      partyTypecode: ORGANIZATION
+                      partyIdentifier: X00045678
+                      displayName: ABC Corp
+                programs:
+                  - programNumber: '2424783'
+                    policies:
+                      - policyReference: XL-P000002567
+                        inceptionDate: '2024-01-01'
+                        expirationDate: '2024-12-31'
+                        directAssumedIndicator: Direct
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              examples:
+                example1:
+                  summary: Account created successfully
+                  value:
+                    success: true
+                    message: Account created successfully.
+                    statusCode: 201
+                    data:
+                      requestID: 341132
+                      empRequestURL: https://emp-dev2.axaxl-cloud.com/#/modelling/341132
+                      catModelRequestId: '12345'
+                    errors: null
+                example2:
+                  summary: Account creation failed.
+                  value:
+                    success: false
+                    message: Account creation failed.
+                    statusCode: 400
+                    data: null
+                    errors: Account Number is required. Inception date is required.
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              example:
+                code: '400'
+                message: Bad Request.
+                timestamp: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              example:
+                code: '401'
+                message: Unauthorized.
+                timestamp: string
+        '500':
+          description: Unexpected error - this covers other 4XX and 5XX
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              example:
+                code: '500'
+                message: Unexpected error. This is an error message
+                timestamp: string
+        default:
+          description: Unexpected error - this covers other 4XX and 5XX
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              example:
+                code: '500'
+                message: Unexpected error. This is an error message
+                timestamp: string
+      security:
+        - expmodel_auth:
+            - expmodel.write
+components:
+  schemas:
+    error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: '400'
+        message:
+          type: string
+          example: This is an error message.
+        timestamp:
+          type: string
+          format: date-time
+      description: This object describes the default error response
+    ExposureModelRequest:
+      $ref: '#/components/schemas/submission'
+    submission:
+      title: Submission
+      description: >-
+        This entity represents the Submission (New lead or a Renewal) data which
+        is initiated by a Broker to commence a probable lead in the system.
+      type: object
+      properties:
+        submissionReference:
+          type: string
+          description: This is the business key for submission entity
+          maxLength: 80
+          example:
+            - XL-S000010880
+        targetSystem:
+          type: string
+          description: >-
+            This field designates the specific PAS system, which could be
+            GENIUS, Frame, or WINS, where the data is directed.
+          maxLength: 50
+          example:
+            - Genius
+        submissionCurrencyCode:
+          description: >-
+            A reference to Currency entity with code and description,to track
+            the currency in which the premium or limits are going to be recorded
+            in.
+          $ref: '#/components/schemas/codeReferenceValues/properties/code'
+          example:
+            - EUR
+        originatingOfficeCode:
+          description: >-
+            A reference to originating office entity with code and
+            description,to indicate the Office where the risk is written.
+          $ref: '#/components/schemas/codeReferenceValues/properties/code'
+          example:
+            - OF0004
+        lineOfOperationName:
+          description: >-
+            This field indicates the various lines of operations executed within
+            EMP application.This is unique to the application's context and are
+            intended for internal operational categorization and not the
+            standardized line of business.
+          type: string
+          maxLength: 255
+          example:
+            - JB-Manufacturing
+        operationalSegmentName:
+          description: >-
+            This field indicates distinct segments of operations conducted
+            within EMP application.These segments are unique to the
+            application's context and serve for internal operational tracking
+            and not the standardized Operational business unit.
+          type: string
+          maxLength: 255
+          example:
+            - Downstream Energy
+        systemAccountReference:
+          type: string
+          description: >-
+            This is the account number maintained in EMP application, sourced
+            from CAT modeling team and will be maintained in Workbench for EMP
+            integration.This field applicable only to EMP application and
+            optional for others.
+          maxLength: 80
+          example:
+            - SX3000817503/161
+            - '45673'
+        sourceCedentName:
+          description: >-
+            This attribute indicates cedent organizations along with lead or
+            follow indicators or global program or source sytem names,which are
+            specific to EMP application and not standardized.This is not
+            standardized legal entity or party cedent information and is
+            applicable only for EMP application context.
+          type: string
+          maxLength: 255
+          example:
+            - Global Prog wCICLUK
+            - Frame
+        requestIdentifier:
+          description: >-
+            This is the CAT record identifier or the CAT model request Id
+            specific to EMP integration.This is the field populated by workbench
+            and then passed on to EMP application to fetch the response from the
+            EMP as part of EMP integration. This is optional for other
+            workstreams.
+          type: string
+          maxLength: 80
+          example:
+            - 54634-66543-8987
+        overallStatusCode:
+          description: >-
+            A reference to Global Status entity with code and description for
+            overall status of a submission indicating the stage of the request
+            across S/Q/P process.
+          $ref: '#/components/schemas/codeReferenceValues/properties/code'
+          example:
+            - BND
+        partyAssociations:
+          type: array
+          description: An array of party association entities
+          items:
+            $ref: '#/components/schemas/partyAssociation'
+        programs:
+          type: array
+          description: An array of program entities
+          items:
+            $ref: '#/components/schemas/program'
+      required:
+        - submissionReference
+        - operationalSegmentName
+        - systemAccountReference
+        - submissionCurrencyCode
+        - lineOfOperationName
+        - overallStatusCode
+    program:
+      title: Program
+      description: >-
+        This entity represents a piece of business (either a single policy,
+        layered program or multinational program) across its lifecycle of
+        endorsements and renewals. Program is associated with a product and may
+        have one or more policies in any given underwriting period.
+      type: object
+      properties:
+        programNumber:
+          type: string
+          description: >-
+            A number that uniquely identifies a collection of policies and
+            quotes aligned to a business offering.
+          maxLength: 80
+          example:
+            - '2424783'
+        policies:
+          type: array
+          description: An array of policy entities
+          items:
+            $ref: '#/components/schemas/policy'
+    policy:
+      title: Policy
+      description: >-
+        Legally binding agreement provided by an Insurer to provide protection
+        against unexpected risk or losses in return for an amount of money i.e.
+        Premium by another Party.
+      type: object
+      properties:
+        policyReference:
+          type: string
+          description: Business key assigned to a policy.
+          maxLength: 80
+          example:
+            - XL-P000002567
+        inceptionDate:
+          description: >-
+            Date on which the insurance policy becomes active and provide
+            coverage to policyholder, marking the start date of insurance
+            policy.
+          $ref: '#/components/schemas/actiondateTime/properties/dateOnly'
+          example:
+            - '2024-01-01'
+        expirationDate:
+          description: Date on which the policy expired.
+          $ref: '#/components/schemas/actiondateTime/properties/dateOnly'
+          example:
+            - '2024-01-01'
+        directAssumedIndicator:
+          type: string
+          description: >-
+            An indicator identifying Direct, Assumed policy contracts.  The
+            direct and assumed indicator applies to Inward policies.  The sale
+            of an insurance contract is categorized as direct. The sale of a
+            reinsurance contract is categorized as assumed.
+          maxLength: 10
+          example:
+            - Direct
+            - Assumed
+      required:
+        - inceptionDate
+        - expirationDate
+    party:
+      title: Party
+      description: An individual or organisation of significance to AXA XL.
+      type: object
+      properties:
+        partyTypecode:
+          description: >-
+            A list of values used to classify the type of party (e.g. person,
+            organization).
+          $ref: '#/components/schemas/codeReferenceValues/properties/code'
+          example:
+            - PERSON
+        partyIdentifier:
+          type: string
+          description: XL Name Identifier or Network Identifier with respect to the party
+          maxLength: 80
+          example:
+            - X00016758
+        displayName:
+          type: string
+          description: Name of a party in text format.
+          maxLength: 255
+          example:
+            - Joe Bloggs
+      required:
+        - displayName
+    partyAssociation:
+      title: Party Association
+      description: >-
+        A Party can have multiple associations with a specific business object,
+        indicating their role or relationship. The Party Association Type
+        describes the nature of this relationship, such as Main Broker or
+        Claimant. It helps clarify how different Parties are connected in the
+        underwriting process.
+      type: object
+      properties:
+        partyRoleTypeCode:
+          description: >-
+            A list of values used to classify the type of party role (e.g.
+            broker, insurer).
+          $ref: '#/components/schemas/codeReferenceValues/properties/code'
+          example:
+            - Insured
+        party:
+          type: string
+          description: >-
+            Unique number assigned for Party Role entity to track entity related
+            attributes.
+          $ref: '#/components/schemas/party'
+          example:
+            - partyId: P2
+              displayName: John
+      required:
+        - partyRoleTypeCode
+    actiondateTime:
+      type: object
+      properties:
+        timeZoneCode:
+          type: string
+          description: The time zone of the date and time being represented.
+          example:
+            - America/New_York
+        dateTime:
+          type: string
+          format: date-time
+          description: The date and time being represented in ISO 8601 format.
+          example:
+            - '2024-01-01T00:00:00Z'
+        dateOnly:
+          type: string
+          format: date
+          description: The date being represented in ISO 8601 format.
+          example:
+            - '2024-01-01'
+        qualifier:
+          type: string
+          description: The type of date being represented
+          example:
+            - Time of Loss
+      oneOf:
+        - required:
+            - dateTime
+        - required:
+            - dateOnly
+    codeReferenceValues:
+      title: Code Reference Value
+      description: Specify code with its short and long description
+      type: object
+      properties:
+        code:
+          type: string
+          description: >-
+            Code/Identifier to the list of values used to classify reference
+            entity.
+          maxLength: 20
+          example:
+            - OR
+            - LCM
+            - '913'
+        shortDescription:
+          type: string
+          description: >-
+            Short description/descriptive name or code of the list of values in
+            the reference entity.
+          maxLength: 500
+          example:
+            - Occurrence Reported
+            - Light Commercial
+            - hk_insurance_authority
+        longDescription:
+          type: string
+          description: Long description of the list of values in the reference entity.
+          maxLength: 500
+          example:
+            - >-
+              This is a combination of both the above Triggers. Any occurrence
+              which gets reported to the insurer during the Policy period will
+              be covered.
+            - >-
+              Light Commercial including: Police vehicles, fire dept, vehicles
+              and light trucks, pick-ups and vans used for commercial purposes
+            - Hong Kong Insurance Authority
+      required:
+        - code
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    expmodel_auth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: "https://login.microsoftonline.com/53b7cac7-14be-46d4-be43-f2ad9244d901/oauth2/v2.0/token"
+          scopes:
+            Submission.Write: Grants write access to create exposure model request in EMP platform.
